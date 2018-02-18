@@ -85,8 +85,6 @@ function docker_bootstrap()
             --output "${image}.tar.gz" \
             --silent \
             "${rootfs}"
-
-    echo " * extract ${image}" 1>&3
     ${sudo} mkdir "${image}"
     ${sudo} tar \
             -x \
@@ -138,7 +136,7 @@ EOF
 # create images from bootstrap archive
 function docker_import()
 {
-    echo "-- docker import from ${image}.tar" 1>&3
+    echo "-- docker import from ${image}" 1>&3
     docker import "${image}.tar" "${user}/alpine:${distname}"
     docker run "${user}/alpine:${distname}" \
            echo " * build ${user}/alpine:${distname}" 1>&3
