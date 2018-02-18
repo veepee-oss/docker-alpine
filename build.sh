@@ -55,7 +55,7 @@ function docker_bootstrap()
     rootfs="${ftp}/alpine-minirootfs-${distname}-x86_64.tar.gz"
     image="/tmp/image-${distname}-${arch}"
 
-    echo "-- bootstrap ${distname}" 1>&3
+    echo '-- bootstrap' 1>&3
 
     if [ "$(id -u)" -ne 0 ]
     then
