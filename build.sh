@@ -79,14 +79,14 @@ function docker_bootstrap()
     fi
 
     # download minimal image
-    echo "-- download alpine-minirootfs-${distname}-x86_64.tar.gz" 1>&3
+    echo " * download ${image}" 1>&3
     ${sudo} curl \
             --location \
             --output "${image}.tar.gz" \
             --silent \
             "${rootfs}"
 
-    echo "-- extract alpine-minirootfs-${distname}-x86_64.tar.gz" 1>&3
+    echo " * extract ${image}" 1>&3
     ${sudo} mkdir "${image}"
     ${sudo} tar \
             -x \
@@ -119,7 +119,7 @@ http://mirror.vpgrp.io/alpine/v${distid}/community
 EOF
 
     # upgrade (without output...)
-    echo ' * apk upgrade' 1>&3
+    # echo ' * apk upgrade' 1>&3
     # ${sudo} chroot "${image}" sh -c \
     #         "apk update && \
     #          apk upgrade &&
