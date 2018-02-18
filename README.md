@@ -21,9 +21,9 @@ all of our images are accurates.
 
 Supported tags.
 
-- 3.5
-- 3.6
-- 3.7
+- 3.5, 3.5.2
+- 3.6, 3.6.2
+- 3.7, 3.7.0, latest
 
 ## Requirements
 
