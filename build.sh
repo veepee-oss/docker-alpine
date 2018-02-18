@@ -85,14 +85,13 @@ function docker_bootstrap()
             --output "${image}.tar.gz" \
             --silent \
             "${rootfs}"
-    ${sudo} gunzip "${image}.tar.gz"
 
     echo "-- extract alpine-minirootfs-${distname}-x86_64.tar.gz" 1>&3
     ${sudo} mkdir "${image}"
     ${sudo} tar \
             -x \
             -C "${image}" \
-            -f /tmp/alpine.tar.gz \
+            -f "${image}.tar.gz" \
             --numeric-owner \
             -z
 
