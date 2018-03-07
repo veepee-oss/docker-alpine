@@ -1,4 +1,5 @@
 # docker-alpine
+
 [![License][license-img]][license-href]
 [![pipeline][pipeline-img]][pipeline-href]
 [![docker][docker-img]][docker-href]
@@ -8,7 +9,7 @@
 Alpine Linux  is a security-oriented,  lightweight Linux distribution  based on
 musl libc and busybox.
 
-[alpinelinux.org](https://alpinelinux.org/)
+[alpinelinux.org][overview-href]
 
 ## Description
 
@@ -91,9 +92,10 @@ request.
 ```
 
 [license-img]: https://img.shields.io/badge/license-Apache-blue.svg
-[license-href]: /LICENSE
+[license-href]: LICENSE
 [pipeline-img]: https://git.vpgrp.io/docker/docker-alpine/badges/master/pipeline.svg
 [pipeline-href]: https://git.vpgrp.io/docker/docker-alpine/commits/master
 [docker-img]: https://img.shields.io/docker/pulls/vpgrp/alpine.svg
 [docker-href]: https://registry.hub.docker.com/u/vpgrp/alpine
-[contribute-href]: /CONTRIBUTING.md
+[overview-href]: https://alpinelinux.org/
+[contribute-href]: CONTRIBUTING.md

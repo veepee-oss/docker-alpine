@@ -116,12 +116,21 @@ http://mirror.vpgrp.io/alpine/v${distid}/main
 http://mirror.vpgrp.io/alpine/v${distid}/community
 EOF
 
-    # upgrade (without output...)
-    # echo ' * apk upgrade' 1>&3
-    # ${sudo} chroot "${image}" sh -c \
-    #         "apk update && \
-    #          apk upgrade &&
-    #          rm -f /var/cache/apk/*"
+    # upgrade
+    echo ' * apk upgrade' 1>&3
+    ${sudo} chroot "${image}" sh -c \
+            "apk update  -q && \
+             apk upgrade -q"
+
+    # add ca-certificates
+    echo ' * apk add ca-certificates' 1>&3
+    ${sudo} chroot "${image}" sh -c \
+            "apk add -q ca-certificates"
+
+    # clean
+    echo ' * clean image' 1>&3
+    ${sudo} chroot "${image}" sh -c \
+            "rm -f /var/cache/apk/*"
 
     # create archive
     if [ -f "${image}.tar" ]
