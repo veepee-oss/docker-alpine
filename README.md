@@ -4,6 +4,15 @@
 [![pipeline][pipeline-img]][pipeline-href]
 [![docker][docker-img]][docker-href]
 
+1. [Overview](#overview)
+2. [Description](#description)
+3. [Tags](#tags)
+4. [Setup](#setup)
+5. [Usage](#usage)
+6. [Limitations](#limitations)
+7. [Development](#development)
+8. [Miscellaneous](#miscellaneous)
+
 ## Overview
 
 Alpine Linux  is a security-oriented,  lightweight Linux distribution  based on
@@ -26,7 +35,7 @@ Supported tags.
 - 3.6, 3.6.2
 - 3.7, 3.7.0, latest
 
-## Requirements
+## Setup
 
 On Debian, Devuan and Ubuntu you need the following packages:
 
