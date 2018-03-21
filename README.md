@@ -1,7 +1,6 @@
 # docker-alpine
 
 [![License][license-img]][license-href]
-[![pipeline][pipeline-img]][pipeline-href]
 [![docker][docker-img]][docker-href]
 
 1. [Overview](#overview)
@@ -102,8 +101,6 @@ request.
 
 [license-img]: https://img.shields.io/badge/license-Apache-blue.svg
 [license-href]: LICENSE
-[pipeline-img]: https://git.vpgrp.io/docker/docker-alpine/badges/master/pipeline.svg
-[pipeline-href]: https://git.vpgrp.io/docker/docker-alpine/commits/master
 [docker-img]: https://img.shields.io/docker/pulls/vpgrp/alpine.svg
 [docker-href]: https://registry.hub.docker.com/u/vpgrp/alpine
 [overview-href]: https://alpinelinux.org/
