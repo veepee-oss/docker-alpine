@@ -127,6 +127,11 @@ EOF
     ${sudo} chroot "${image}" sh -c \
             "apk add -q ca-certificates"
 
+    # add dumb-init
+    echo ' * apk add dumb-init' 1>&3
+    ${sudo} chroot "${image}" sh -c \
+            "apk add -q dumb-init"
+
     # clean
     echo ' * clean image' 1>&3
     ${sudo} chroot "${image}" sh -c \
