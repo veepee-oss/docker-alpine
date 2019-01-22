@@ -248,6 +248,10 @@ then
             distname='3.7.0'
             distid='3.7'
             ;;
+        3.8|3.8.0)
+            distname='3.8.0'
+            distid='3.8'
+            ;;
         *)
             usage
             exit 1
@@ -273,7 +277,7 @@ fi
 # -l / --latest
 if [ -z "${latest}" ]
 then
-    latest='3.7.0'
+    latest='3.8.0'
 fi
 
 # -v / --verbose
