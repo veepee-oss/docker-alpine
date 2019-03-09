@@ -6,7 +6,7 @@
     expire_in: 1 day
     paths:
       - image
-  image: debian:latest
+  image: docker:latest
   stage: build
   variables:
     DOCKER_DRIVER: overlay
