@@ -2,16 +2,20 @@
 # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
 
 .template: &build
+  stage: build
+  image: docker:latest
+  before_script:
+    - apk update && apk add bash curl
   artifacts:
     expire_in: 1 day
     paths:
       - image
-  image: docker:latest
-  stage: build
   variables:
     DOCKER_DRIVER: overlay
 
 .template: &deploy
+  stage: deploy
+  image: docker:latest
   before_script:
     - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
     - docker load -i image/v3.5.tar
@@ -19,15 +23,12 @@
     - docker load -i image/v3.7.tar
     - docker load -i image/v3.8.tar
     - docker load -i image/v3.9.tar
-  image: docker:latest
   only:
     - master
   services:
     - docker:dind
-  stage: deploy
   variables:
     DOCKER_DRIVER: overlay
-
 
 stages:
   - test
