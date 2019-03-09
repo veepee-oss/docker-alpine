@@ -151,18 +151,18 @@ EOF
 function docker_import()
 {
     echo "-- docker import from ${image}" 1>&3
-    docker import "${image}.tar" "${user}/alpine:${distname}"
-    docker run "${user}/alpine:${distname}" \
-           echo " * build ${user}/alpine:${distname}" 1>&3
-    docker tag "${user}/alpine:${distname}" "${user}/alpine:${distid}"
-    docker run "${user}/alpine:${distid}" \
-           echo " * build ${user}/alpine:${distid}" 1>&3
+    docker import "${image}.tar" "${user}alpine:${distname}"
+    docker run "${user}alpine:${distname}" \
+           echo " * build ${user}alpine:${distname}" 1>&3
+    docker tag "${user}alpine:${distname}" "${user}alpine:${distid}"
+    docker run "${user}alpine:${distid}" \
+           echo " * build ${user}alpine:${distid}" 1>&3
 
     if [ "${distname}" = "${latest}" ]
     then
-        docker tag "${user}/alpine:${distname}" "${user}/alpine:latest"
-        docker run "${user}/alpine:latest" \
-               echo " * build ${user}/alpine:latest" 1>&3
+        docker tag "${user}alpine:${distname}" "${user}alpine:latest"
+        docker run "${user}alpine:latest" \
+               echo " * build ${user}alpine:latest" 1>&3
     fi
 }
 
@@ -170,15 +170,15 @@ function docker_import()
 function docker_push()
 {
     echo "-- docker push" 1>&3
-    echo " * push ${user}/alpine:${distname}" 1>&3
-    docker push "${user}/alpine:${distname}"
-    echo " * push ${user}/alpine:${distid}" 1>&3
-    docker push "${user}/alpine:${distid}"
+    echo " * push ${user}alpine:${distname}" 1>&3
+    docker push "${user}alpine:${distname}"
+    echo " * push ${user}alpine:${distid}" 1>&3
+    docker push "${user}alpine:${distid}"
 
     if [ "${distname}" = "${latest}"  ]
     then
-        echo " * push ${user}/alpine:latest" 1>&3
-        docker push "${user}/alpine:latest"
+        echo " * push ${user}alpine:latest" 1>&3
+        docker push "${user}alpine:latest"
     fi
 }
 
@@ -200,7 +200,7 @@ do
             ;;
         u)
             # -u / --user
-            user=${OPTARG}
+            user="${OPTARG}/"
             ;;
         p)
             # -p / --push
