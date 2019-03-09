@@ -41,7 +41,7 @@ Supported tags.
 On Debian, Devuan and Ubuntu you need the following packages:
 
 ```bash
-sudo apt-get -qq -y install wget
+sudo apt-get -qq -y install curl
 ```
 
 You also need to be in the docker group to use Docker.
