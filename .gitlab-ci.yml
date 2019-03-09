@@ -12,13 +12,13 @@
     DOCKER_DRIVER: overlay
 
 stages:
-  - linter
+  - test
   - build
   - deploy
 
-# linter
+# test
 shellcheck:
-  stage: linter
+  stage: test
   image: vpgrp/linter:shell
   script:
     - shellcheck build.sh
@@ -29,35 +29,35 @@ v3.5:
   script:
     - ./build.sh -d 3.5 -v
     - mkdir image
-    - docker save alpine:3.5 > image/3.5.tar
+    - docker save alpine:3.5 > image/v3.5.tar
 
 v3.6:
   <<: *build
   script:
     - ./build.sh -d 3.6 -v
     - mkdir image
-    - docker save alpine:3.6 > image/3.6.tar
+    - docker save alpine:3.6 > image/v3.6.tar
 
 v3.7:
   <<: *build
   script:
     - ./build.sh -d 3.7 -v
     - mkdir image
-    - docker save alpine:3.7 > image/3.7.tar
+    - docker save alpine:3.7 > image/v3.7.tar
 
 v3.8:
   <<: *build
   script:
     - ./build.sh -d 3.8 -v
     - mkdir image
-    - docker save alpine:3.8 > image/3.8.tar
+    - docker save alpine:3.8 > image/v3.8.tar
 
 v3.9:
   <<: *build
   script:
     - ./build.sh -d 3.9 -v
     - mkdir image
-    - docker save alpine:3.9 > image/3.9.tar
+    - docker save alpine:3.9 > image/v3.9.tar
 
 # deploy
 # EOF
