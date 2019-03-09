@@ -71,13 +71,13 @@ Show help.
 Build your own Alpine image (eg. 3.8).
 
 ```bash
-./build.sh -d 3.8 -u vpgrp
+./build.sh -d 3.8 -u vptech
 ```
 
 Build your own Alpine image (eg. 3.9) and push it on the Docker Hub.
 
 ```bash
-./build.sh -d 3.9 -u vpgrp -p
+./build.sh -d 3.9 -u vptech -p
 ```
 
 ## Limitations
@@ -103,7 +103,7 @@ request.
 
 [license-img]: https://img.shields.io/badge/license-ISC-blue.svg
 [license-href]: LICENSE
-[docker-img]: https://img.shields.io/docker/pulls/vpgrp/alpine.svg
+[docker-img]: https://img.shields.io/docker/pulls/vptech/alpine.svg
 [docker-href]: https://hub.docker.com/r/vptech/alpine
 [overview-href]: https://alpinelinux.org/
 [contribute-href]: CONTRIBUTING.md
