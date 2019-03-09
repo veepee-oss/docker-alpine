@@ -6,10 +6,28 @@
     expire_in: 1 day
     paths:
       - image
-  image: vpgrp/kitchen:latest
+  image: debian:latest
   stage: build
   variables:
     DOCKER_DRIVER: overlay
+
+.template: &deploy
+  before_script:
+    - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+    - docker load -i image/v3.5.tar
+    - docker load -i image/v3.6.tar
+    - docker load -i image/v3.7.tar
+    - docker load -i image/v3.8.tar
+    - docker load -i image/v3.9.tar
+  image: docker:latest
+  only:
+    - master
+  services:
+    - docker:dind
+  stage: deploy
+  variables:
+    DOCKER_DRIVER: overlay
+
 
 stages:
   - test
