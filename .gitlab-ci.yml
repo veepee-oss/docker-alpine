@@ -8,7 +8,7 @@ stages:
 
 # linter
 shellcheck:
-  stage: syntax
+  stage: linter
   image: vpgrp/linter:shell
   script:
     - shellcheck build.sh
