@@ -24,35 +24,35 @@ shellcheck:
     - shellcheck build.sh
     
 # build
-3.5:
+3dot5:
   <<: *build
   script:
     - ./build.sh -d 3.5
     - mkdir image
     - docker save alpine:3.5 > image/3.5.tar
 
-3.6:
+3dot6:
   <<: *build
   script:
     - ./build.sh -d 3.6
     - mkdir image
     - docker save alpine:3.6 > image/3.6.tar
 
-3.7:
+3dot7:
   <<: *build
   script:
     - ./build.sh -d 3.7
     - mkdir image
     - docker save alpine:3.7 > image/3.7.tar
 
-3.8:
+3dot8:
   <<: *build
   script:
     - ./build.sh -d 3.8
     - mkdir image
     - docker save alpine:3.8 > image/3.8.tar
 
-3.9:
+3dot9:
   <<: *build
   script:
     - ./build.sh -d 3.9
