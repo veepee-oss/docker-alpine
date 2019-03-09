@@ -1,6 +1,16 @@
 ---
 # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
 
+.template: &build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - image
+  image: vpgrp/kitchen:latest
+  stage: build
+  variables:
+    DOCKER_DRIVER: overlay
+
 stages:
   - linter
   - build
@@ -14,6 +24,40 @@ shellcheck:
     - shellcheck build.sh
     
 # build
+3.5:
+  <<: *build
+  script:
+    - ./build.sh -d 3.5
+    - mkdir image
+    - docker save alpine:3.5 > image/3.5.tar
+
+3.6:
+  <<: *build
+  script:
+    - ./build.sh -d 3.6
+    - mkdir image
+    - docker save alpine:3.6 > image/3.6.tar
+
+3.7:
+  <<: *build
+  script:
+    - ./build.sh -d 3.7
+    - mkdir image
+    - docker save alpine:3.7 > image/3.7.tar
+
+3.8:
+  <<: *build
+  script:
+    - ./build.sh -d 3.8
+    - mkdir image
+    - docker save alpine:3.8 > image/3.8.tar
+
+3.9:
+  <<: *build
+  script:
+    - ./build.sh -d 3.9
+    - mkdir image
+    - docker save alpine:3.9 > image/3.9.tar
 
 # deploy
 # EOF
