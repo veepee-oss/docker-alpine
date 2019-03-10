@@ -79,4 +79,38 @@ v3.9:
     - docker save alpine:3.9 > image/v3.9.tar
 
 # deploy
+# https://hub.docker.com/u/vpgrp/
+vpgrp:
+  <<: *deploy
+  script:
+    - docker tag alpine:3.5 vpgrp/alpine:3.5
+    - docker tag alpine:3.6 vpgrp/alpine:3.6
+    - docker tag alpine:3.7 vpgrp/alpine:3.7
+    - docker tag alpine:3.8 vpgrp/alpine:3.8
+    - docker tag alpine:3.9 vpgrp/alpine:3.9
+    - docker tag alpine:3.9 vpgrp/alpine:latest
+    - docker push vpgrp/alpine:3.5
+    - docker push vpgrp/alpine:3.6
+    - docker push vpgrp/alpine:3.7
+    - docker push vpgrp/alpine:3.8
+    - docker push vpgrp/alpine:3.9
+    - docker push vpgrp/alpine:latest
+
+# https://hub.docker.com/u/vptech/
+vptech:
+  <<: *deploy
+  script:
+    - docker tag alpine:3.5 vptech/alpine:3.5
+    - docker tag alpine:3.6 vptech/alpine:3.6
+    - docker tag alpine:3.7 vptech/alpine:3.7
+    - docker tag alpine:3.8 vptech/alpine:3.8
+    - docker tag alpine:3.9 vptech/alpine:3.9
+    - docker tag alpine:3.9 vptech/alpine:latest
+    - docker push vptech/alpine:3.5
+    - docker push vptech/alpine:3.6
+    - docker push vptech/alpine:3.7
+    - docker push vptech/alpine:3.8
+    - docker push vptech/alpine:3.9
+    - docker push vptech/alpine:latest
+
 # EOF
