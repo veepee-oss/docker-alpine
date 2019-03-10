@@ -30,11 +30,11 @@ all of our images are accurates.
 
 Supported tags.
 
-- 3.5, 3.5.2
-- 3.6, 3.6.2
-- 3.7, 3.7.0
-- 3.8, 3.8.2, 
-- 3.9, 3.9.2, latest
+- 3.5
+- 3.6
+- 3.7
+- 3.8 
+- 3.9, latest
 
 ## Setup
 
