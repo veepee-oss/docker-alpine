@@ -3,7 +3,7 @@
 
 .template: &build
   stage: build
-  image: docker:latest
+  image: docker.registry.vptech.eu/docker:latest
   before_script:
     - apk update && apk add bash curl
   artifacts:
@@ -15,7 +15,7 @@
 
 .template: &deploy
   stage: deploy
-  image: docker:latest
+  image: docker.registry.vptech.eu/docker:latest
   before_script:
     - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
     - docker load -i image/alpine-v3.5.tar
@@ -38,7 +38,7 @@ stages:
 # test
 shellcheck:
   stage: test
-  image: vpgrp/linter:shell
+  image: docker.registry.vptech.eu/vpgrp/linter:shell
   script:
     - shellcheck build.sh
     
