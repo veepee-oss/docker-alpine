@@ -1,23 +1,20 @@
 # docker-alpine
 
-[![License][license-img]][license-href]
-[![docker][docker-img]][docker-href]
-
 1. [Overview](#overview)
-2. [Description](#description)
-3. [Tags](#tags)
-4. [Setup](#setup)
-5. [Usage](#usage)
-6. [Limitations](#limitations)
-7. [Development](#development)
-8. [Miscellaneous](#miscellaneous)
+1. [Description](#description)
+1. [Tags](#tags)
+1. [Setup](#setup)
+1. [Usage](#usage)
+1. [Limitations](#limitations)
+1. [Development](#development)
+1. [Miscellaneous](#miscellaneous)
 
 ## Overview
 
 Alpine Linux  is a security-oriented,  lightweight Linux distribution  based on
 musl libc and busybox.
 
-[alpinelinux.org][overview-href]
+[alpinelinux.org](https://alpinelinux.org/)
 
 ## Description
 
@@ -33,8 +30,11 @@ Supported tags.
 - 3.5
 - 3.6
 - 3.7
-- 3.8 
-- 3.9, latest
+- 3.8
+- 3.9
+- 3.10
+- 3.11
+- 3.12, latest
 
 ## Setup
 
@@ -86,7 +86,7 @@ Only work on Debian, Devuan and Ubuntu.
 
 ## Development
 
-Please read carefully [CONTRIBUTING.md][contribute-href]  before making a merge
+Please read carefully [CONTRIBUTING.md](CONTRIBUTING.md) before making a merge
 request.
 
 ## Miscellaneous
@@ -100,10 +100,3 @@ request.
   ╚═(███)═╝
    ╚═(███)═╝
 ```
-
-[license-img]: https://img.shields.io/badge/license-ISC-blue.svg
-[license-href]: LICENSE
-[docker-img]: https://img.shields.io/docker/pulls/vptech/alpine.svg
-[docker-href]: https://hub.docker.com/r/vptech/alpine
-[overview-href]: https://alpinelinux.org/
-[contribute-href]: CONTRIBUTING.md

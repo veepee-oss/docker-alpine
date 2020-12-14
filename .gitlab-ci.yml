@@ -1,5 +1,12 @@
 ---
-# https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+
+include:
+  - project: veepee/vptech/sre/iac/ci-cd/markdown-lint
+    ref: 1.2.2
+    file: gitlab-ci.yml
+  - project: veepee/vptech/sre/iac/ci-cd/semantic-release
+    ref: 3.2.1
+    file: gitlab-ci.yml
 
 .template: &build
   stage: build
@@ -17,100 +24,54 @@
   stage: deploy
   image: docker.registry.vptech.eu/docker:latest
   before_script:
-    - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-    - docker load -i image/alpine-v3.5.tar
-    - docker load -i image/alpine-v3.6.tar
-    - docker load -i image/alpine-v3.7.tar
-    - docker load -i image/alpine-v3.8.tar
-    - docker load -i image/alpine-v3.9.tar
+    - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
+    - docker load -i image/alpine-v3.10.tar
+    - docker load -i image/alpine-v3.11.tar
+    - docker load -i image/alpine-v3.12.tar
   only:
     - master
   services:
-    - docker:dind
+    - docker.registry.vptech.eu/docker:dind
   variables:
     DOCKER_DRIVER: overlay
 
 stages:
-  - test
+  - lint
   - build
   - deploy
+  - release
 
-# test
-shellcheck:
-  stage: test
-  image: docker.registry.vptech.eu/vpgrp/linter:shell
-  script:
-    - shellcheck build.sh
-    
-# build
-v3.5:
+v3.10:
   <<: *build
   script:
-    - ./build.sh -d 3.5 -v
+    - ./build.sh -d 3.10 -v
     - mkdir image
-    - docker save alpine:3.5 > image/alpine-v3.5.tar
+    - docker save alpine:3.7 > image/alpine-v3.10.tar
 
-v3.6:
+v3.11:
   <<: *build
   script:
-    - ./build.sh -d 3.6 -v
+    - ./build.sh -d 3.11 -v
     - mkdir image
-    - docker save alpine:3.6 > image/alpine-v3.6.tar
+    - docker save alpine:3.11 > image/alpine-v3.11.tar
 
-v3.7:
+v3.12:
   <<: *build
   script:
-    - ./build.sh -d 3.7 -v
+    - ./build.sh -d 3.12 -v
     - mkdir image
-    - docker save alpine:3.7 > image/alpine-v3.7.tar
-
-v3.8:
-  <<: *build
-  script:
-    - ./build.sh -d 3.8 -v
-    - mkdir image
-    - docker save alpine:3.8 > image/alpine-v3.8.tar
-
-v3.9:
-  <<: *build
-  script:
-    - ./build.sh -d 3.9 -v
-    - mkdir image
-    - docker save alpine:3.9 > image/alpine-v3.9.tar
-
-# deploy
-# https://hub.docker.com/u/vpgrp/
-vpgrp:
-  <<: *deploy
-  script:
-    - docker tag alpine:3.5 vpgrp/alpine:3.5
-    - docker tag alpine:3.6 vpgrp/alpine:3.6
-    - docker tag alpine:3.7 vpgrp/alpine:3.7
-    - docker tag alpine:3.8 vpgrp/alpine:3.8
-    - docker tag alpine:3.9 vpgrp/alpine:3.9
-    - docker tag alpine:3.9 vpgrp/alpine:latest
-    - docker push vpgrp/alpine:3.5
-    - docker push vpgrp/alpine:3.6
-    - docker push vpgrp/alpine:3.7
-    - docker push vpgrp/alpine:3.8
-    - docker push vpgrp/alpine:3.9
-    - docker push vpgrp/alpine:latest
+    - docker save alpine:3.12 > image/alpine-v3.12.tar
 
 # https://hub.docker.com/u/vptech/
 vptech:
   <<: *deploy
   script:
-    - docker tag alpine:3.5 vptech/alpine:3.5
-    - docker tag alpine:3.6 vptech/alpine:3.6
-    - docker tag alpine:3.7 vptech/alpine:3.7
-    - docker tag alpine:3.8 vptech/alpine:3.8
-    - docker tag alpine:3.9 vptech/alpine:3.9
-    - docker tag alpine:3.9 vptech/alpine:latest
-    - docker push vptech/alpine:3.5
-    - docker push vptech/alpine:3.6
-    - docker push vptech/alpine:3.7
-    - docker push vptech/alpine:3.8
-    - docker push vptech/alpine:3.9
+    - docker tag alpine:3.10 vptech/alpine:3.10
+    - docker tag alpine:3.11 vptech/alpine:3.11
+    - docker tag alpine:3.12 vptech/alpine:3.12
+    - docker tag alpine:3.12 vptech/alpine:latest
+    - docker push vptech/alpine:3.10
+    - docker push vptech/alpine:3.11
+    - docker push vptech/alpine:3.12
     - docker push vptech/alpine:latest
-
 # EOF
