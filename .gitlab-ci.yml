@@ -46,7 +46,7 @@ v3.10:
   script:
     - ./build.sh -d 3.10 -v
     - mkdir image
-    - docker save alpine:3.7 > image/alpine-v3.10.tar
+    - docker save alpine:3.10 > image/alpine-v3.10.tar
 
 v3.11:
   <<: *build
