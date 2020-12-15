@@ -17,6 +17,11 @@ include:
     expire_in: 1 day
     paths:
       - image
+  services:
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
+  tags:
+    - dind
   variables:
     DOCKER_DRIVER: overlay
 
@@ -31,7 +36,10 @@ include:
   only:
     - master
   services:
-    - docker.registry.vptech.eu/docker:dind
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
+  tags:
+    - dind
   variables:
     DOCKER_DRIVER: overlay
 
@@ -70,8 +78,5 @@ vptech:
     - docker tag alpine:3.11 vptech/alpine:3.11
     - docker tag alpine:3.12 vptech/alpine:3.12
     - docker tag alpine:3.12 vptech/alpine:latest
-    - docker push vptech/alpine:3.10
-    - docker push vptech/alpine:3.11
-    - docker push vptech/alpine:3.12
-    - docker push vptech/alpine:latest
+    - docker push --all-tags vptech/alpine
 # EOF
