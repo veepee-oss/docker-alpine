@@ -23,7 +23,7 @@ OPTIONS:
    -h, --help           Show help
 
    -d, --dist           Choose Alpine distribution
-                        eg: 3.10, 3.11, 3.12
+                        eg: 3.10, 3.11, 3.12, 3.13
 
    -t, --timezone       Choose your preferred timezone
                         default: Europe/Amsterdam
@@ -112,8 +112,8 @@ EOF
     echo ' * /etc/apk/repositories' 1>&3
     cat <<EOF | \
         ${sudo} tee "${image}/etc/apk/repositories"
-http://mirror.vpgrp.io/alpine/v${distid}/main
-http://mirror.vpgrp.io/alpine/v${distid}/community
+http://mirror.veepee.tech/alpine/v${distid}/main
+http://mirror.veepee.tech/alpine/v${distid}/community
 EOF
 
     # upgrade
@@ -236,37 +236,41 @@ fi
 if [ -n "${dist}" ]
 then
     case ${dist} in
-        3.5|3.5.2)
-            distname='3.5.2'
+        3.5|3.5.3)
+            distname='3.5.3'
             distid='3.5'
             ;;
-        3.6|3.6.2)
-            distname='3.6.2'
+        3.6|3.6.5)
+            distname='3.6.5'
             distid='3.6'
             ;;
-        3.7|3.7.0)
-            distname='3.7.0'
+        3.7|3.7.3)
+            distname='3.7.3'
             distid='3.7'
             ;;
-        3.8|3.8.2)
-            distname='3.8.2'
+        3.8|3.8.5)
+            distname='3.8.5'
             distid='3.8'
             ;;
-        3.9|3.9.2)
-            distname='3.9.2'
+        3.9|3.9.6)
+            distname='3.9.6'
             distid='3.9'
             ;;
-        3.10|3.10.3)
-            distname='3.10.3'
+        3.10|3.10.9)
+            distname='3.10.9'
             distid='3.10'
             ;;
-        3.11|3.11.6)
-            distname='3.11.6'
+        3.11|3.11.11)
+            distname='3.11.11'
             distid='3.11'
             ;;
-        3.12|3.12.2)
-            distname='3.12.2'
+        3.12|3.12.7)
+            distname='3.12.7'
             distid='3.12'
+            ;;
+        3.13|3.12.5)
+            distname='3.13.5'
+            distid='3.13'
             ;;
         *)
             usage
@@ -293,7 +297,7 @@ fi
 # -l / --latest
 if [ -z "${latest}" ]
 then
-    latest='3.12.2'
+    latest='3.13.5'
 fi
 
 # -v / --verbose

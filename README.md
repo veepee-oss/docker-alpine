@@ -34,7 +34,8 @@ Supported tags.
 - 3.9
 - 3.10
 - 3.11
-- 3.12, latest
+- 3.12
+- 3.13, latest
 
 ## Setup
 
@@ -58,9 +59,9 @@ docker login
 
 ## Usage
 
-You first need to choose which dist between 3.5, 3.6, 3.7, 3.8 and 3.9 you want
-(3.9 will be the 'latest' tag) and you need to choose you user (or organization)
-name on Docker Hub.
+You first  need to  choose which dist  between 3.5, 3.6,  3.7, 3.8,  3.9, 3.10,
+3.11, 3.12  or 3.13 you want  (3.13 will be the  'latest' tag) and you  need to
+choose you user (or organization) name on Docker Hub.
 
 Show help.
 
@@ -68,16 +69,16 @@ Show help.
 ./build.sh -h
 ```
 
-Build your own Alpine image (eg. 3.8).
+Build your own Alpine image (eg. 3.12).
 
 ```bash
-./build.sh -d 3.8 -u vptech
+./build.sh -d 3.12 -u vptech
 ```
 
-Build your own Alpine image (eg. 3.9) and push it on the Docker Hub.
+Build your own Alpine image (eg. 3.13) and push it on the Docker Hub.
 
 ```bash
-./build.sh -d 3.9 -u vptech -p
+./build.sh -d 3.13 -u vptech -p
 ```
 
 ## Limitations
