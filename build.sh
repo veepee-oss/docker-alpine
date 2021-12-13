@@ -7,7 +7,7 @@ set -e
 PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
 arch='amd64'
-version='1.2'
+version='1.3'
 
 function usage()
 {
@@ -23,7 +23,7 @@ OPTIONS:
    -h, --help           Show help
 
    -d, --dist           Choose Alpine distribution
-                        eg: 3.10, 3.11, 3.12, 3.13
+                        eg: 3.10, 3.11, 3.12, 3.13, 3.14, 3.15
 
    -t, --timezone       Choose your preferred timezone
                         default: Europe/Amsterdam
@@ -35,7 +35,7 @@ OPTIONS:
                         default: no
 
    -l, --latest         Force the "latest"
-                        default: 3.12
+                        default: 3.15
 
    -v, --verbose        Verbose mode
 
@@ -260,17 +260,25 @@ then
             distname='3.10.9'
             distid='3.10'
             ;;
-        3.11|3.11.11)
-            distname='3.11.11'
+        3.11|3.11.13)
+            distname='3.11.13'
             distid='3.11'
             ;;
-        3.12|3.12.7)
-            distname='3.12.7'
+        3.12|3.12.9)
+            distname='3.12.9'
             distid='3.12'
             ;;
-        3.13|3.12.5)
-            distname='3.13.5'
+        3.13|3.12.7)
+            distname='3.13.7'
             distid='3.13'
+            ;;
+        3.14|3.14.3)
+            distname='3.14.3'
+            distid='3.14'
+            ;;
+        3.15|3.15.0)
+            distname='3.15.0'
+            distid='3.15'
             ;;
         *)
             usage
@@ -297,7 +305,7 @@ fi
 # -l / --latest
 if [ -z "${latest}" ]
 then
-    latest='3.13.5'
+    latest='3.15.0'
 fi
 
 # -v / --verbose
