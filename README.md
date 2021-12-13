@@ -1,4 +1,4 @@
-# docker-alpine
+# alpine
 
 1. [Overview](#overview)
 1. [Description](#description)
@@ -35,7 +35,9 @@ Supported tags.
 - 3.10
 - 3.11
 - 3.12
-- 3.13, latest
+- 3.13
+- 3.14
+- 3.15, latest
 
 ## Setup
 
