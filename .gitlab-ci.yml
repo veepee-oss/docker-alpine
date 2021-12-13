@@ -11,6 +11,9 @@ include:
     ref: 1.1.0
     file: gitlab-ci.yml
 
+variables:
+  SEMANTIC_CONFIG_FILE: changelog
+
 .template: &build
   stage: build
   image: docker.registry.vptech.eu/docker:latest
