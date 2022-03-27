@@ -89,7 +89,7 @@ Only work on Debian, Devuan and Ubuntu.
 
 ## Development
 
-Please read carefully [CONTRIBUTING.md](CONTRIBUTING.md) before making a merge
+Please read carefully [CONTRIBUTING.md](CONTRIBUTING.md)  before making a merge
 request.
 
 ## Miscellaneous

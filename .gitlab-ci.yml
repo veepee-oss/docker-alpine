@@ -1,18 +1,15 @@
 ---
 
 include:
-  - project: veepee/vptech/sre/iac/ci-cd/markdown-lint
-    ref: latest
+  - project: veepee/vptech/ci-cd/markdown-lint
+    ref: 1-latest
     file: gitlab-ci.yml
-  - project: veepee/vptech/sre/iac/ci-cd/semantic-release
-    ref: latest
+  - project: veepee/vptech/ci-cd/semantic-release
+    ref: 2-latest
     file: gitlab-ci.yml
-  - project: veepee/vptech/sre/iac/ci-cd/shellcheck
-    ref: latest
+  - project: veepee/vptech/ci-cd/shellcheck
+    ref: 1-latest
     file: gitlab-ci.yml
-
-variables:
-  SEMANTIC_CONFIG_FILE: changelog
 
 .template: &build
   stage: build
