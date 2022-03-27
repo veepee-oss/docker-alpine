@@ -39,6 +39,7 @@ include:
     - docker load -i image/alpine-v3.14.tar
     - docker load -i image/alpine-v3.15.tar
   only:
+    - main
     - master
   services:
     - name: docker.registry.vptech.eu/docker:dind
