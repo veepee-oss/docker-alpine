@@ -1,3 +1,10 @@
+## [1.2.3](https://git.vptech.eu/veepee/vptech/container-images/alpine/compare/1.2.2...1.2.3) (2022-03-27)
+
+
+### Continuous Integration
+
+* fix main branch issue ([a1f2b77](https://git.vptech.eu/veepee/vptech/container-images/alpine/commit/a1f2b778cb3dfcba22cc840b51f06f159eb1fad1))
+
 ## [1.2.2](https://git.vptech.eu/veepee/vptech/container-images/alpine/compare/1.2.1...1.2.2) (2022-03-27)
 
 
