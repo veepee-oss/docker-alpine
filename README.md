@@ -1,14 +1,5 @@
 # alpine
 
-1. [Overview](#overview)
-1. [Description](#description)
-1. [Tags](#tags)
-1. [Setup](#setup)
-1. [Usage](#usage)
-1. [Limitations](#limitations)
-1. [Development](#development)
-1. [Miscellaneous](#miscellaneous)
-
 ## Overview
 
 Alpine Linux  is a security-oriented,  lightweight Linux distribution  based on
@@ -62,8 +53,8 @@ docker login
 ## Usage
 
 You first  need to  choose which dist  between 3.5, 3.6,  3.7, 3.8,  3.9, 3.10,
-3.11, 3.12  or 3.13 you want  (3.13 will be the  'latest' tag) and you  need to
-choose you user (or organization) name on Docker Hub.
+3.11, 3.12, 3.13, 3.14 or 3.15 you want (3.15 will be the 'latest' tag) and you
+need to choose you user (or organization) name on Docker Hub.
 
 Show help.
 
@@ -74,13 +65,13 @@ Show help.
 Build your own Alpine image (eg. 3.12).
 
 ```bash
-./build.sh -d 3.12 -u vptech
+./build.sh -d 3.14 -u vptech
 ```
 
 Build your own Alpine image (eg. 3.13) and push it on the Docker Hub.
 
 ```bash
-./build.sh -d 3.13 -u vptech -p
+./build.sh -d 3.15 -u vptech -p
 ```
 
 ## Limitations
@@ -89,12 +80,11 @@ Only work on Debian, Devuan and Ubuntu.
 
 ## Development
 
-Please read carefully [CONTRIBUTING.md](CONTRIBUTING.md)  before making a merge
-request.
+Please read carefully [CONTRIBUTING.md](CONTRIBUTING.md) before making a merge request.
 
 ## Miscellaneous
 
-```
+```text
     ╚⊙ ⊙╝
   ╚═(███)═╝
  ╚═(███)═╝
