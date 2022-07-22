@@ -28,7 +28,8 @@ Supported tags.
 - 3.12
 - 3.13
 - 3.14
-- 3.15, latest
+- 3.15
+- 3.16, latest
 
 ## Setup
 
