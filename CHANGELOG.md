@@ -1,3 +1,10 @@
+# [1.3.0](https://git.vptech.eu/veepee/vptech/container-images/alpine/compare/1.2.3...1.3.0) (2022-07-22)
+
+
+### Features
+
+* add Alpine 3.16 ([e6ae8ba](https://git.vptech.eu/veepee/vptech/container-images/alpine/commit/e6ae8ba231ef63f289f4423680b10033394041c5))
+
 ## [1.2.3](https://git.vptech.eu/veepee/vptech/container-images/alpine/compare/1.2.2...1.2.3) (2022-03-27)
 
 
