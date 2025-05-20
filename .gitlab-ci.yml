@@ -36,6 +36,10 @@ include:
     - docker load -i image/alpine-v3.14.tar
     - docker load -i image/alpine-v3.15.tar
     - docker load -i image/alpine-v3.16.tar
+    - docker load -i image/alpine-v3.18.tar
+    - docker load -i image/alpine-v3.19.tar
+    - docker load -i image/alpine-v3.20.tar
+    - docker load -i image/alpine-v3.22.tar
   only:
     - main
     - master
@@ -74,6 +78,34 @@ build:3.16:
     - mkdir image
     - docker save alpine:3.16 > image/alpine-v3.16.tar
 
+build:3.18:
+  <<: *build
+  script:
+    - ./build.sh -d 3.18
+    - mkdir image
+    - docker save alpine:3.18 > image/alpine-v3.18.tar
+
+build:3.19:
+  <<: *build
+  script:
+    - ./build.sh -d 3.19
+    - mkdir image
+    - docker save alpine:3.19 > image/alpine-v3.19.tar
+
+build:3.20:
+  <<: *build
+  script:
+    - ./build.sh -d 3.20
+    - mkdir image
+    - docker save alpine:3.20 > image/alpine-v3.20.tar
+
+build:3.22:
+  <<: *build
+  script:
+    - ./build.sh -d 3.22
+    - mkdir image
+    - docker save alpine:3.22 > image/alpine-v3.22.tar
+
 # https://hub.docker.com/u/vptech/
 vptech:
   <<: *deploy
@@ -81,6 +113,10 @@ vptech:
     - docker tag alpine:3.14 vptech/alpine:3.14
     - docker tag alpine:3.15 vptech/alpine:3.15
     - docker tag alpine:3.16 vptech/alpine:3.16
-    - docker tag alpine:3.16 vptech/alpine:latest
+    - docker tag alpine:3.18 vptech/alpine:3.18
+    - docker tag alpine:3.19 vptech/alpine:3.19
+    - docker tag alpine:3.20 vptech/alpine:3.20
+    - docker tag alpine:3.22 vptech/alpine:3.22
+    - docker tag alpine:3.22 vptech/alpine:latest
     - docker push --all-tags vptech/alpine
 # EOF
