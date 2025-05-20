@@ -23,7 +23,7 @@ OPTIONS:
    -h, --help           Show help
 
    -d, --dist           Choose Alpine distribution
-                        eg: 3.10, 3.11, 3.12, 3.13, 3.14, 3.15, 3.16
+                        eg: 3.10, 3.11, 3.12, 3.13, 3.14, 3.15, 3.16, 3.18, 3.19, 3.20, 3.22
 
    -t, --timezone       Choose your preferred timezone
                         default: Europe/Amsterdam
@@ -35,7 +35,7 @@ OPTIONS:
                         default: no
 
    -l, --latest         Force the "latest"
-                        default: 3.16
+                        default: 3.22
 
    -v, --verbose        Verbose mode
 
@@ -284,6 +284,22 @@ then
             distname='3.16.1'
             distid='3.16'
             ;;
+        3.18|3.18.6)
+            distname='3.18.6'
+            distid='3.18'
+            ;;
+        3.19|3.19.1)
+            distname='3.19.1'
+            distid='3.19'
+            ;;
+        3.20|3.20.0)
+            distname='3.20.0'
+            distid='3.20'
+            ;;
+        3.22|3.22.0)
+            distname='3.22.0'
+            distid='3.22'
+            ;;
         *)
             usage
             exit 1
@@ -309,7 +325,7 @@ fi
 # -l / --latest
 if [ -z "${latest}" ]
 then
-    latest='3.16'
+    latest='3.22'
 fi
 
 # -v / --verbose

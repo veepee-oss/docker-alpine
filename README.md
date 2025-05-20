@@ -29,7 +29,11 @@ Supported tags.
 - 3.13
 - 3.14
 - 3.15
-- 3.16, latest
+- 3.16
+- 3.18
+- 3.19
+- 3.20
+- 3.22, latest
 
 ## Setup
 
@@ -54,7 +58,7 @@ docker login
 ## Usage
 
 You first  need to  choose which dist  between 3.5, 3.6,  3.7, 3.8,  3.9, 3.10,
-3.11, 3.12, 3.13, 3.14 or 3.15 you want (3.15 will be the 'latest' tag) and you
+3.11, 3.12, 3.13, 3.14, 3.15, 3.16, 3.18, 3.19, 3.20 or 3.22 you want (3.22 will be the 'latest' tag) and you
 need to choose you user (or organization) name on Docker Hub.
 
 Show help.
@@ -69,10 +73,10 @@ Build your own Alpine image (eg. 3.12).
 ./build.sh -d 3.14 -u vptech
 ```
 
-Build your own Alpine image (eg. 3.13) and push it on the Docker Hub.
+Build your own Alpine image (eg. 3.22) and push it on the Docker Hub.
 
 ```bash
-./build.sh -d 3.15 -u vptech -p
+./build.sh -d 3.22 -u vptech -p
 ```
 
 ## Limitations
