@@ -15,10 +15,6 @@ include:
   before_script:
     - apk update && apk add bash curl
     - chmod +x build.sh
-    - docker version
-    - docker info
-    - sed -i 's/docker import "${image}.tar" "${user}alpine:${distname}"/docker import "${image}.tar" "${user}alpine:${distname}" || { echo "Docker import failed"; ls -la "${image}.tar"; exit 1; }/g' build.sh
-
   artifacts:
     expire_in: 1 day
     paths:
@@ -30,7 +26,9 @@ include:
   tags:
     - dind
   variables:
-    DOCKER_DRIVER: overlay
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
 
 .template: &deploy
   stage: deploy
