@@ -14,6 +14,7 @@ include:
   image: docker.registry.vptech.eu/docker:latest
   before_script:
     - apk update && apk add bash curl
+    - chmod +x build.sh
   artifacts:
     expire_in: 1 day
     paths:
