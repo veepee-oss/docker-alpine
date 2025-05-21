@@ -143,25 +143,23 @@ EOF
         ${sudo} rm "${image}.tar"
     fi
     ${sudo} tar -C "${image}" -c -f "${image}.tar" --numeric-owner .
-
-
 }
 
 # create images from bootstrap archive
 function docker_import()
 {
     echo "-- docker import from ${image}" 1>&3
-    docker import "${image}.tar" "${user}alpine:${distname}"
-    docker run "${user}alpine:${distname}" \
+    ${docker_cmd} import "${image}.tar" "${user}alpine:${distname}"
+    ${docker_cmd} run "${user}alpine:${distname}" \
            echo " * build ${user}alpine:${distname}" 1>&3
-    docker tag "${user}alpine:${distname}" "${user}alpine:${distid}"
-    docker run "${user}alpine:${distid}" \
+    ${docker_cmd} tag "${user}alpine:${distname}" "${user}alpine:${distid}"
+    ${docker_cmd} run "${user}alpine:${distid}" \
            echo " * build ${user}alpine:${distid}" 1>&3
 
     if [ "${distname}" = "${latest}" ]
     then
-        docker tag "${user}alpine:${distname}" "${user}alpine:latest"
-        docker run "${user}alpine:latest" \
+        ${docker_cmd} tag "${user}alpine:${distname}" "${user}alpine:latest"
+        ${docker_cmd} run "${user}alpine:latest" \
                echo " * build ${user}alpine:latest" 1>&3
     fi
 }
@@ -171,14 +169,14 @@ function docker_push()
 {
     echo "-- docker push" 1>&3
     echo " * push ${user}alpine:${distname}" 1>&3
-    docker push "${user}alpine:${distname}"
+    ${docker_cmd} push "${user}alpine:${distname}"
     echo " * push ${user}alpine:${distid}" 1>&3
-    docker push "${user}alpine:${distid}"
+    ${docker_cmd} push "${user}alpine:${distid}"
 
     if [ "${distname}" = "${latest}"  ]
     then
         echo " * push ${user}alpine:latest" 1>&3
-        docker push "${user}alpine:latest"
+        ${docker_cmd} push "${user}alpine:latest"
     fi
 }
 
@@ -336,6 +334,18 @@ then
     exec 2>/dev/null
 else
     exec 3>&1
+fi
+
+# Detect if we should use podman or docker
+if command -v podman >/dev/null 2>&1; then
+    docker_cmd="podman"
+    echo "Using podman instead of docker" 1>&3
+elif command -v docker >/dev/null 2>&1; then
+    docker_cmd="docker"
+    echo "Using docker" 1>&3
+else
+    echo "Neither docker nor podman found! Please install one of them." 1>&2
+    exit 1
 fi
 
 docker_bootstrap
