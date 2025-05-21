@@ -72,7 +72,14 @@ build:3.15:
 build:3.16:
   <<: *build
   script:
-    - ./build.sh -d 3.16
+    - ./build.sh -d 3.16 || {
+        # If it fails, check for the image.tar file
+        echo "Build failed, checking image file:";
+        ls -la /tmp/image-3.16.1-amd64.tar;
+        # Try docker import directly
+        echo "Trying direct import:";
+        docker import /tmp/image-3.16.1-amd64.tar test-alpine:3.16.1;
+      }
     - mkdir image
     - docker save alpine:3.16 > image/alpine-v3.16.tar
 
