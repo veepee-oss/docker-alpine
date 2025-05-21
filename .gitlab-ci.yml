@@ -15,6 +15,17 @@ include:
   before_script:
     - apk update && apk add bash curl
     - chmod +x build.sh
+    - echo "Waiting for Docker daemon to be ready..."
+    - sleep 10  # Give the Docker daemon time to initialize
+    - docker version || (echo "Docker not available" && exit 1)
+    - docker info || (echo "Docker info failed" && exit 1)
+    - echo "Testing Docker import capability..."
+    - echo "FROM scratch" > /tmp/Dockerfile.test
+    - echo "CMD [\"echo\", \"hello\"]" >> /tmp/Dockerfile.test
+    - docker build -t test-image -f /tmp/Dockerfile.test .
+    - docker save test-image > /tmp/test-image.tar
+    - docker rmi test-image
+    - docker import /tmp/test-image.tar test-import-image    
   artifacts:
     expire_in: 1 day
     paths:
