@@ -19,6 +19,7 @@ include:
     - mkdir -p /run/user/$(id -u)
     - export XDG_RUNTIME_DIR=/run/user/$(id -u)
     - ln -sf /usr/bin/podman /usr/local/bin/docker # Docker command compatibility
+    - chmod +x ./build.sh  # Make the script executable
   artifacts:
     expire_in: 1 day
     paths:
@@ -38,6 +39,7 @@ include:
     - mkdir -p /run/user/$(id -u)
     - export XDG_RUNTIME_DIR=/run/user/$(id -u)
     - ln -sf /usr/bin/podman /usr/local/bin/docker # Docker command compatibility
+    - chmod +x ./build.sh  # Make the script executable
     - podman login docker.io -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
     - podman load -i image/alpine-v3.14.tar
     - podman load -i image/alpine-v3.15.tar
