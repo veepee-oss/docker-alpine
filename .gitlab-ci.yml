@@ -22,7 +22,7 @@ include:
   services:
     - name: docker.registry.vptech.eu/docker:dind
       alias: docker
-      command: ["--privileged"]  
+      command: ["--privileged"]
   tags:
     - dind
   variables:
@@ -34,20 +34,28 @@ include:
   stage: deploy
   image: docker.registry.vptech.eu/docker:latest
   before_script:
+    - chmod +x build.sh
     - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
     - docker load -i image/alpine-v3.14.tar
     - docker load -i image/alpine-v3.15.tar
     - docker load -i image/alpine-v3.16.tar
+    - docker load -i image/alpine-v3.18.tar
+    - docker load -i image/alpine-v3.19.tar
+    - docker load -i image/alpine-v3.20.tar
+    - docker load -i image/alpine-v3.22.tar
   only:
     - main
     - master
   services:
     - name: docker.registry.vptech.eu/docker:dind
       alias: docker
+      command: ["--privileged"]
   tags:
     - dind
   variables:
-    DOCKER_DRIVER: overlay
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
 
 stages:
   - lint
@@ -59,34 +67,60 @@ build:3.14:
   <<: *build
   script:
     - ./build.sh -d 3.14
-    - mkdir image
+    - mkdir -p image
     - docker save alpine:3.14 > image/alpine-v3.14.tar
 
 build:3.15:
   <<: *build
   script:
     - ./build.sh -d 3.15
-    - mkdir image
+    - mkdir -p image
     - docker save alpine:3.15 > image/alpine-v3.15.tar
 
 build:3.16:
   <<: *build
   script:
-    - chmod +x build.sh
-    - sed -i 's/verbose=.*/verbose="true"/g' build.sh
-    - ./build.sh -d 3.16 || true
-    - echo "Checking image file:"
-    - ls -la /tmp/image-3.16.1-amd64.tar || true
-    - echo "Trying direct import:"
-    - docker import /tmp/image-3.16.1-amd64.tar test-alpine:3.16.1 || true
+    - ./build.sh -d 3.16
     - mkdir -p image
-    - docker save alpine:3.16 > image/alpine-v3.16.tar || echo "Failed to save image, but continuing"
+    - docker save alpine:3.16 > image/alpine-v3.16.tar
+
+build:3.18:
+  <<: *build
+  script:
+    - ./build.sh -d 3.18
+    - mkdir -p image
+    - docker save alpine:3.18 > image/alpine-v3.18.tar
+
+build:3.19:
+  <<: *build
+  script:
+    - ./build.sh -d 3.19
+    - mkdir -p image
+    - docker save alpine:3.19 > image/alpine-v3.19.tar
+
+build:3.20:
+  <<: *build
+  script:
+    - ./build.sh -d 3.20
+    - mkdir -p image
+    - docker save alpine:3.20 > image/alpine-v3.20.tar
+
+build:3.22:
+  <<: *build
+  script:
+    - ./build.sh -d 3.22
+    - mkdir -p image
+    - docker save alpine:3.22 > image/alpine-v3.22.tar
+
+# https://hub.docker.com/u/vptech/
 vptech:
   <<: *deploy
   script:
     - docker tag alpine:3.14 vptech/alpine:3.14
     - docker tag alpine:3.15 vptech/alpine:3.15
     - docker tag alpine:3.16 vptech/alpine:3.16
-    - docker tag alpine:3.16 vptech/alpine:latest
+    - docker tag alpine:3.18 vptech/alpine:3.18
+    - docker tag alpine:3.19 vptech/alpine:3.19
+    - docker tag alpine:3.20 vptech/alpine:3.20
+    - docker tag alpine:3.22 vptech/alpine:3.22
     - docker push --all-tags vptech/alpine
-# EOF
