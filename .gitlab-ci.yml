@@ -22,6 +22,7 @@ include:
   services:
     - name: docker.registry.vptech.eu/docker:dind
       alias: docker
+      command: ["--privileged"]  
   tags:
     - dind
   variables:
