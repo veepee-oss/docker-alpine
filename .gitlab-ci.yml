@@ -15,37 +15,14 @@ include:
   before_script:
     - apk update && apk add bash curl
     - chmod +x build.sh
-    # Create CI-specific build script
-    - >
-      cat > ci_build.sh << 'EOF'
-      #!/bin/bash
-      set -e
-      
-      # Source the original script to get functions
-      source ./build.sh
-      
-      # Override Docker functions to avoid failures
-      function docker_import() {
-          echo "Skipping docker_import in CI environment"
-          return 0
-      }
-      
-      function docker_push() {
-          echo "Skipping docker_push in CI environment"
-          return 0
-      }
-      
-      # Run just the bootstrap
-      docker_bootstrap
-      
-      # Print tarball location
-      echo "Bootstrap completed successfully. Tarball at: ${image}.tar"
-      EOF
-    - chmod +x ci_build.sh
   artifacts:
     expire_in: 1 day
     paths:
       - image
+  services:
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
+      command: ["--privileged"]
   tags:
     - dind
   variables:
@@ -59,6 +36,13 @@ include:
   before_script:
     - chmod +x build.sh
     - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
+    - docker load -i image/alpine-v3.14.tar
+    - docker load -i image/alpine-v3.15.tar
+    - docker load -i image/alpine-v3.16.tar
+    - docker load -i image/alpine-v3.18.tar
+    - docker load -i image/alpine-v3.19.tar
+    - docker load -i image/alpine-v3.20.tar
+    - docker load -i image/alpine-v3.22.tar
   only:
     - main
     - master
@@ -79,50 +63,53 @@ stages:
   - deploy
   - release
 
-build:3.14:
-  <<: *build
-  script:
-    # Run the CI-specific build script
-    - ./ci_build.sh
-    # Override variables for this specific version
-    - export distname="3.14.7"
-    - export distid="3.14"
-    # Import the image manually
-    - mkdir -p image
-    - docker import /tmp/image-${distname}-amd64.tar alpine:${distid}
-    - docker save alpine:${distid} > image/alpine-v${distid}.tar
-
-# Repeat for other versions...
-
+# Test just Alpine 3.22
 build:3.22:
   <<: *build
   script:
-    # Run the CI-specific build script
-    - ./ci_build.sh
-    # Override variables for this specific version
+    # Run the bootstrap step and manually handle import
+    - mkdir -p image
+    # Extract the necessary variables from build.sh
     - export distname="3.22.0"
     - export distid="3.22"
-    # Import the image manually
-    - mkdir -p image
-    - docker import /tmp/image-${distname}-amd64.tar alpine:${distid}
-    - docker save alpine:${distid} > image/alpine-v${distid}.tar
+    - export timezone="Europe/Amsterdam"
+    
+    # Manual bootstrap (copied from build.sh)
+    - export cdn="http://dl-cdn.alpinelinux.org"
+    - export ftp="${cdn}/alpine/v${distid}/releases/x86_64"
+    - export rootfs="${ftp}/alpine-minirootfs-${distname}-x86_64.tar.gz"
+    - export image="/tmp/image-${distname}-amd64"
+    
+    # Download and extract
+    - echo "Downloading from ${rootfs}"
+    - curl --location --output "${image}.tar.gz" --silent "${rootfs}"
+    - mkdir -p "${image}"
+    - tar -x -C "${image}" -f "${image}.tar.gz" --numeric-owner -z
+    
+    # Configure
+    - echo "${timezone}" > "${image}/etc/timezone"
+    - echo "nameserver 8.8.4.4" > "${image}/etc/resolv.conf"
+    - echo "nameserver 8.8.8.8" >> "${image}/etc/resolv.conf"
+    - echo "http://mirror.veepee.tech/alpine/v${distid}/main" > "${image}/etc/apk/repositories"
+    - echo "http://mirror.veepee.tech/alpine/v${distid}/community" >> "${image}/etc/apk/repositories"
+    
+    # Create archive
+    - tar -C "${image}" -c -f "${image}.tar" --numeric-owner .
+    
+    # Import with Docker
+    - docker import "${image}.tar" "alpine:${distid}"
+    - docker save "alpine:${distid}" > "image/alpine-v${distid}.tar"
 
-# https://hub.docker.com/u/vptech/
-vptech:
+test:deploy-3.22:
   <<: *deploy
-  script:
-    - docker load -i image/alpine-v3.14.tar
-    - docker load -i image/alpine-v3.15.tar
-    - docker load -i image/alpine-v3.16.tar
-    - docker load -i image/alpine-v3.18.tar
-    - docker load -i image/alpine-v3.19.tar
-    - docker load -i image/alpine-v3.20.tar
+  stage: deploy
+  before_script:
+    - apk update && apk add bash curl
+    - chmod +x build.sh
+    - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
     - docker load -i image/alpine-v3.22.tar
-    - docker tag alpine:3.14 vptech/alpine:3.14
-    - docker tag alpine:3.15 vptech/alpine:3.15
-    - docker tag alpine:3.16 vptech/alpine:3.16
-    - docker tag alpine:3.18 vptech/alpine:3.18
-    - docker tag alpine:3.19 vptech/alpine:3.19
-    - docker tag alpine:3.20 vptech/alpine:3.20
-    - docker tag alpine:3.22 vptech/alpine:3.22
-    - docker push --all-tags vptech/alpine
+  script:
+    - docker tag alpine:3.22 vptech/alpine:test-3.22
+    - docker push vptech/alpine:test-3.22
+  needs:
+    - build:3.22
