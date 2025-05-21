@@ -11,50 +11,40 @@ include:
 
 .template: &build
   stage: build
-  image: registry.fedoraproject.org/fedora:latest
+  image: docker.registry.vptech.eu/docker:latest
   before_script:
-    - dnf install -y podman curl bash tar
-    - mkdir -p /etc/containers/registries.conf.d/
-    - echo -e "[registries.search]\nregistries=['docker.registry.vptech.eu', 'docker.io']" > /etc/containers/registries.conf.d/vptech.conf
-    - mkdir -p /run/user/$(id -u)
-    - export XDG_RUNTIME_DIR=/run/user/$(id -u)
-    - ln -sf /usr/bin/podman /usr/local/bin/docker # Docker command compatibility
-    - chmod +x ./build.sh  # Make the script executable
+    - apk update && apk add bash curl
   artifacts:
     expire_in: 1 day
     paths:
       - image
+  services:
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
+      command: ["--privileged"]
   tags:
-    - dind 
+    - dind
   variables:
-    STORAGE_DRIVER: vfs
+    DOCKER_DRIVER: overlay
 
 .template: &deploy
   stage: deploy
-  image: registry.fedoraproject.org/fedora:latest
+  image: docker.registry.vptech.eu/docker:latest
   before_script:
-    - dnf install -y podman curl bash tar
-    - mkdir -p /etc/containers/registries.conf.d/
-    - echo -e "[registries.search]\nregistries=['docker.registry.vptech.eu', 'docker.io']" > /etc/containers/registries.conf.d/vptech.conf  
-    - mkdir -p /run/user/$(id -u)
-    - export XDG_RUNTIME_DIR=/run/user/$(id -u)
-    - ln -sf /usr/bin/podman /usr/local/bin/docker # Docker command compatibility
-    - chmod +x ./build.sh  # Make the script executable
-    - podman login docker.io -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
-    - podman load -i image/alpine-v3.14.tar
-    - podman load -i image/alpine-v3.15.tar
-    - podman load -i image/alpine-v3.16.tar
-    - podman load -i image/alpine-v3.18.tar
-    - podman load -i image/alpine-v3.19.tar
-    - podman load -i image/alpine-v3.20.tar
-    - podman load -i image/alpine-v3.22.tar
+    - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
+    - docker load -i image/alpine-v3.14.tar
+    - docker load -i image/alpine-v3.15.tar
+    - docker load -i image/alpine-v3.16.tar
   only:
     - main
     - master
+  services:
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
   tags:
-    - dind 
+    - dind
   variables:
-    STORAGE_DRIVER: vfs
+    DOCKER_DRIVER: overlay
 
 stages:
   - lint
@@ -66,57 +56,30 @@ build:3.14:
   <<: *build
   script:
     - ./build.sh -d 3.14
-    - mkdir -p image
-    - podman save alpine:3.14 > image/alpine-v3.14.tar
+    - mkdir image
+    - docker save alpine:3.14 > image/alpine-v3.14.tar
 
 build:3.15:
   <<: *build
   script:
     - ./build.sh -d 3.15
-    - mkdir -p image
-    - podman save alpine:3.15 > image/alpine-v3.15.tar
+    - mkdir image
+    - docker save alpine:3.15 > image/alpine-v3.15.tar
 
 build:3.16:
   <<: *build
   script:
     - ./build.sh -d 3.16
-    - mkdir -p image
-    - podman save alpine:3.16 > image/alpine-v3.16.tar
-
-build:3.18:
-  <<: *build
-  script:
-    - ./build.sh -d 3.18
-    - mkdir -p image
-    - podman save alpine:3.18 > image/alpine-v3.18.tar
-
-build:3.19:
-  <<: *build
-  script:
-    - ./build.sh -d 3.19
-    - mkdir -p image
-    - podman save alpine:3.19 > image/alpine-v3.19.tar
-
-build:3.20:
-  <<: *build
-  script:
-    - ./build.sh -d 3.20
-    - mkdir -p image
-    - podman save alpine:3.20 > image/alpine-v3.20.tar
-
-build:3.22:
-  <<: *build
-  script:
-    - ./build.sh -d 3.22
-    - mkdir -p image
-    - podman save alpine:3.22 > image/alpine-v3.22.tar
+    - mkdir image
+    - docker save alpine:3.16 > image/alpine-v3.16.tar
 
 # https://hub.docker.com/u/vptech/
 vptech:
   <<: *deploy
   script:
-    - podman tag alpine:3.22 vptech/alpine:3.22
-    - podman tag alpine:3.22 vptech/alpine:latest
-    # Cannot use --all-tags with podman, so use individual push commands
-    - podman push vptech/alpine:3.22
-    - podman push vptech/alpine:latest
+    - docker tag alpine:3.14 vptech/alpine:3.14
+    - docker tag alpine:3.15 vptech/alpine:3.15
+    - docker tag alpine:3.16 vptech/alpine:3.16
+    - docker tag alpine:3.16 vptech/alpine:latest
+    - docker push --all-tags vptech/alpine
+# EOF
