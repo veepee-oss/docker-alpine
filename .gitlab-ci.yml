@@ -36,6 +36,10 @@ include:
   tags: [dind]
   before_script:
     - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
+    - docker load -i image/alpine-v3.16.tar
+    - docker load -i image/alpine-v3.18.tar
+    - docker load -i image/alpine-v3.19.tar
+    - docker load -i image/alpine-v3.20.tar
   variables:
     DOCKER_HOST: tcp://docker:2376
   only:
@@ -83,10 +87,6 @@ build-alpine-3.20:
 deploy-vptech:
   extends: .deploy
   script:
-    - docker load -i image/alpine-v3.16.tar
-    - docker load -i image/alpine-v3.18.tar
-    - docker load -i image/alpine-v3.19.tar
-    - docker load -i image/alpine-v3.20.tar
     - docker tag alpine:3.16 vptech/alpine:3.16
     - docker tag alpine:3.18 vptech/alpine:3.18
     - docker tag alpine:3.19 vptech/alpine:3.19
