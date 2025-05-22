@@ -77,12 +77,6 @@ build-alpine-3.20:
     - mkdir -p image
     - docker save alpine:3.20 > image/alpine-v3.20.tar
 
-build-alpine-3.21:
-  extends: .build
-  script:
-    - ./build.sh -d 3.21
-    - mkdir -p image
-    - docker save alpine:3.21 > image/alpine-v3.21.tar
 
 # Deploy to Docker Hub
 # https://hub.docker.com/u/vptech/
@@ -93,16 +87,13 @@ deploy-vptech:
     - docker load -i image/alpine-v3.18.tar
     - docker load -i image/alpine-v3.19.tar
     - docker load -i image/alpine-v3.20.tar
-    - docker load -i image/alpine-v3.21.tar
     - docker tag alpine:3.16 vptech/alpine:3.16
     - docker tag alpine:3.18 vptech/alpine:3.18
     - docker tag alpine:3.19 vptech/alpine:3.19
     - docker tag alpine:3.20 vptech/alpine:3.20
-    - docker tag alpine:3.21 vptech/alpine:3.21
     - docker push --all-tags vptech/alpine
   needs:
     - build-alpine-3.16
     - build-alpine-3.18
     - build-alpine-3.19
     - build-alpine-3.20
-    - build-alpine-3.21
