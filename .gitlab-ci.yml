@@ -49,20 +49,6 @@ stages:
   - release
 
 # Alpine builds
-build-alpine-3.14:
-  extends: .build
-  script:
-    - ./build.sh -d 3.14
-    - mkdir -p image
-    - docker save alpine:3.14 > image/alpine-v3.14.tar
-
-build-alpine-3.15:
-  extends: .build
-  script:
-    - ./build.sh -d 3.15
-    - mkdir -p image
-    - docker save alpine:3.15 > image/alpine-v3.15.tar
-
 build-alpine-3.16:
   extends: .build
   script:
@@ -103,15 +89,11 @@ build-alpine-3.21:
 deploy-vptech:
   extends: .deploy
   script:
-    - docker load -i image/alpine-v3.14.tar
-    - docker load -i image/alpine-v3.15.tar
     - docker load -i image/alpine-v3.16.tar
     - docker load -i image/alpine-v3.18.tar
     - docker load -i image/alpine-v3.19.tar
     - docker load -i image/alpine-v3.20.tar
     - docker load -i image/alpine-v3.21.tar
-    - docker tag alpine:3.14 vptech/alpine:3.14
-    - docker tag alpine:3.15 vptech/alpine:3.15
     - docker tag alpine:3.16 vptech/alpine:3.16
     - docker tag alpine:3.18 vptech/alpine:3.18
     - docker tag alpine:3.19 vptech/alpine:3.19
@@ -119,8 +101,6 @@ deploy-vptech:
     - docker tag alpine:3.21 vptech/alpine:3.21
     - docker push --all-tags vptech/alpine
   needs:
-    - build-alpine-3.14
-    - build-alpine-3.15
     - build-alpine-3.16
     - build-alpine-3.18
     - build-alpine-3.19
