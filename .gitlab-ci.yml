@@ -23,6 +23,8 @@ include:
   before_script:
     - apk update && apk add bash curl
     - chmod +x build.sh
+  variables:
+    DOCKER_HOST: tcp://docker:2376
   dependencies: []
 
 .deploy:
@@ -34,6 +36,8 @@ include:
   tags: [dind]
   before_script:
     - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
+  variables:
+    DOCKER_HOST: tcp://docker:2376
   only:
     - main
     - master
