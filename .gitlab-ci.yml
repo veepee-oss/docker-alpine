@@ -92,9 +92,13 @@ deploy-vptech:
     - docker tag alpine:3.19 vptech/alpine:3.19
     - docker tag alpine:3.20 vptech/alpine:3.20
     - docker push vptech/alpine:3.16
+    - sleep 5
     - docker push vptech/alpine:3.18
+    - sleep 5  
     - docker push vptech/alpine:3.19
+    - sleep 5
     - docker push vptech/alpine:3.20
+    - sleep 5
     - docker push vptech/alpine:latest
     - docker push --all-tags vptech/alpine
   needs:
