@@ -296,6 +296,10 @@ then
             distname='3.20.0'
             distid='3.20'
             ;;
+        3.21|3.21.0)
+            distname='3.21.0'
+            distid='3.21'
+            ;;
         3.22|3.22.0)
             distname='3.22.0'
             distid='3.22'
