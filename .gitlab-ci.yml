@@ -9,53 +9,34 @@ include:
     ref: 2-latest
     file: gitlab-ci.yml
 
-.template: &build
+.build:
+  image: docker.registry.vptech.eu/docker:stable
   stage: build
-  image: docker.registry.vptech.eu/docker:latest
-  before_script:
-    - apk update && apk add bash curl
-    - chmod +x build.sh
+  services:
+    - name: docker.registry.vptech.eu/docker:dind
+      alias: docker
+  tags: [dind]
   artifacts:
     expire_in: 1 day
     paths:
       - image
+  before_script:
+    - apk update && apk add bash curl
+    - chmod +x build.sh
+  dependencies: []
+
+.deploy:
+  image: docker.registry.vptech.eu/docker:stable
+  stage: deploy
   services:
     - name: docker.registry.vptech.eu/docker:dind
       alias: docker
-      command: ["--privileged"]
-  tags:
-    - dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-
-.template: &deploy
-  stage: deploy
-  image: docker.registry.vptech.eu/docker:latest
+  tags: [dind]
   before_script:
-    - chmod +x build.sh
     - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
-    - docker load -i image/alpine-v3.14.tar
-    - docker load -i image/alpine-v3.15.tar
-    - docker load -i image/alpine-v3.16.tar
-    - docker load -i image/alpine-v3.18.tar
-    - docker load -i image/alpine-v3.19.tar
-    - docker load -i image/alpine-v3.20.tar
-    - docker load -i image/alpine-v3.22.tar
   only:
     - main
     - master
-  services:
-    - name: docker.registry.vptech.eu/docker:dind
-      alias: docker
-      command: ["--privileged"]
-  tags:
-    - dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
 
 stages:
   - lint
@@ -63,53 +44,98 @@ stages:
   - deploy
   - release
 
-# Test just Alpine 3.22
-build:3.22:
-  <<: *build
+# Debug job (optional - remove if not needed)
+debug-docker:
+  extends: .build
+  stage: build
+  when: manual
   script:
-    # Run the bootstrap step and manually handle import
-    - mkdir -p image
-    # Extract the necessary variables from build.sh
-    - export distname="3.22.0"
-    - export distid="3.22"
-    - export timezone="Europe/Amsterdam"
-    
-    # Manual bootstrap (copied from build.sh)
-    - export cdn="http://dl-cdn.alpinelinux.org"
-    - export ftp="${cdn}/alpine/v${distid}/releases/x86_64"
-    - export rootfs="${ftp}/alpine-minirootfs-${distname}-x86_64.tar.gz"
-    - export image="/tmp/image-${distname}-amd64"
-    
-    # Download and extract
-    - echo "Downloading from ${rootfs}"
-    - curl --location --output "${image}.tar.gz" --silent "${rootfs}"
-    - mkdir -p "${image}"
-    - tar -x -C "${image}" -f "${image}.tar.gz" --numeric-owner -z
-    
-    # Configure
-    - echo "${timezone}" > "${image}/etc/timezone"
-    - echo "nameserver 8.8.4.4" > "${image}/etc/resolv.conf"
-    - echo "nameserver 8.8.8.8" >> "${image}/etc/resolv.conf"
-    - echo "http://mirror.veepee.tech/alpine/v${distid}/main" > "${image}/etc/apk/repositories"
-    - echo "http://mirror.veepee.tech/alpine/v${distid}/community" >> "${image}/etc/apk/repositories"
-    
-    # Create archive
-    - tar -C "${image}" -c -f "${image}.tar" --numeric-owner .
-    
-    # Import with Docker
-    - docker import "${image}.tar" "alpine:${distid}"
-    - docker save "alpine:${distid}" > "image/alpine-v${distid}.tar"
+    - echo "=== Network Debug ==="
+    - cat /etc/resolv.conf
+    - nslookup docker || echo "DNS lookup failed"
+    - ping -c 3 docker || echo "Ping failed"
+    - netstat -rn
+    - echo "=== Docker Debug ==="
+    - echo $DOCKER_HOST
+    - docker version
+    - docker info
+  artifacts: {}
 
-test:deploy-3.22:
-  <<: *deploy
-  stage: deploy
-  before_script:
-    - apk update && apk add bash curl
-    - chmod +x build.sh
-    - docker login -u "$DOCKER_PUBLIC_REGISTRY_USERNAME" -p "$DOCKER_PUBLIC_REGISTRY_PASSWORD"
-    - docker load -i image/alpine-v3.22.tar
+# Alpine builds
+build-alpine-3.14:
+  extends: .build
   script:
-    - docker tag alpine:3.22 vptech/alpine:test-3.22
-    - docker push vptech/alpine:test-3.22
+    - ./build.sh -d 3.14
+    - mkdir -p image
+    - docker save alpine:3.14 > image/alpine-v3.14.tar
+
+build-alpine-3.15:
+  extends: .build
+  script:
+    - ./build.sh -d 3.15
+    - mkdir -p image
+    - docker save alpine:3.15 > image/alpine-v3.15.tar
+
+build-alpine-3.16:
+  extends: .build
+  script:
+    - ./build.sh -d 3.16
+    - mkdir -p image
+    - docker save alpine:3.16 > image/alpine-v3.16.tar
+
+build-alpine-3.18:
+  extends: .build
+  script:
+    - ./build.sh -d 3.18
+    - mkdir -p image
+    - docker save alpine:3.18 > image/alpine-v3.18.tar
+
+build-alpine-3.19:
+  extends: .build
+  script:
+    - ./build.sh -d 3.19
+    - mkdir -p image
+    - docker save alpine:3.19 > image/alpine-v3.19.tar
+
+build-alpine-3.20:
+  extends: .build
+  script:
+    - ./build.sh -d 3.20
+    - mkdir -p image
+    - docker save alpine:3.20 > image/alpine-v3.20.tar
+
+build-alpine-3.22:
+  extends: .build
+  script:
+    - ./build.sh -d 3.22
+    - mkdir -p image
+    - docker save alpine:3.22 > image/alpine-v3.22.tar
+
+# Deploy to Docker Hub
+# https://hub.docker.com/u/vptech/
+deploy-vptech:
+  extends: .deploy
+  script:
+    - docker load -i image/alpine-v3.14.tar
+    - docker load -i image/alpine-v3.15.tar
+    - docker load -i image/alpine-v3.16.tar
+    - docker load -i image/alpine-v3.18.tar
+    - docker load -i image/alpine-v3.19.tar
+    - docker load -i image/alpine-v3.20.tar
+    - docker load -i image/alpine-v3.22.tar
+    - docker tag alpine:3.14 vptech/alpine:3.14
+    - docker tag alpine:3.15 vptech/alpine:3.15
+    - docker tag alpine:3.16 vptech/alpine:3.16
+    - docker tag alpine:3.18 vptech/alpine:3.18
+    - docker tag alpine:3.19 vptech/alpine:3.19
+    - docker tag alpine:3.20 vptech/alpine:3.20
+    - docker tag alpine:3.22 vptech/alpine:3.22
+    - docker push --all-tags vptech/alpine
   needs:
-    - build:3.22
+    - build-alpine-3.14
+    - build-alpine-3.15
+    - build-alpine-3.16
+    - build-alpine-3.18
+    - build-alpine-3.19
+    - build-alpine-3.20
+    - build-alpine-3.22
